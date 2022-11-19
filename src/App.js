@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Slides } from "./components/Slides";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
-import people from "./shared/data";
+import { FaQuoteRight } from "react-icons/fa";
+import persons from "./shared/data";
 
 function App() {
-  const [persons, setPeople] = useState(people);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex(index + 1);
-      if (index === persons.length) {
+      if (index === persons.length - 1) {
         setIndex(0);
       }
     }, 6000);
@@ -33,6 +32,19 @@ function App() {
     }
   };
 
+  const setClass = (index, order) => {
+    if (index === order) {
+      return "activeSlide";
+    }
+    if (order === index - 1) {
+      return "lastSlide";
+    }
+    if (index === 0 && order === persons.length - 1) {
+      return "lastSlide";
+    }
+    return "nextSlide";
+  };
+
   return (
     <section className="section">
       <div className="title">
@@ -41,12 +53,23 @@ function App() {
         </h2>
       </div>
       <div className="section-center">
-        <Slides />
+        {persons.map((item, order) => {
+          const { id, image, name, title, quote } = item;
+          return (
+            <article key={id} className={setClass(index, order)}>
+              <img src={image} className="person-img" alt={name} />
+              <h4>{name}</h4>
+              <p className="title">{title}</p>
+              <p className="text">{quote}</p>
+              <FaQuoteRight className="icon" />
+            </article>
+          );
+        })}
         <button className="prev">
-          <FiChevronLeft prevPerson={prevPerson} />
+          <FiChevronLeft onClick={() => prevPerson()} />
         </button>
         <button className="next">
-          <FiChevronRight nextPerson={nextPerson} />
+          <FiChevronRight onClick={() => nextPerson()} />
         </button>
       </div>
     </section>
