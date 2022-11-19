@@ -1,36 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 import { FaQuoteRight } from "react-icons/fa";
-import persons from "./shared/data";
+import people from "./shared/data";
 
 function App() {
+  const [persons, setPersons] = useState(people);
   const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const lastPerson = persons.length - 1;
+    if (index > lastPerson) {
+      setIndex(0);
+    }
+    if (index < 0) {
+      setIndex(lastPerson);
+    }
+  }, [index, persons]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex(index + 1);
-      if (index === persons.length - 1) {
-        setIndex(0);
-      }
     }, 6000);
     return () => clearInterval(timer);
-  });
-
-  const nextPerson = () => {
-    if (index === persons.length - 1) {
-      setIndex(0);
-    } else {
-      setIndex(index + 1);
-    }
-  };
-
-  const prevPerson = () => {
-    if (index === 0) {
-      setIndex(persons.length - 1);
-    } else {
-      setIndex(index - 1);
-    }
-  };
+  }, [index]);
 
   const setClass = (index, order) => {
     if (index === order) {
@@ -66,10 +58,10 @@ function App() {
           );
         })}
         <button className="prev">
-          <FiChevronLeft onClick={() => prevPerson()} />
+          <FiChevronLeft onClick={() => setIndex(index - 1)} />
         </button>
         <button className="next">
-          <FiChevronRight onClick={() => nextPerson()} />
+          <FiChevronRight onClick={() => setIndex(index + 1)} />
         </button>
       </div>
     </section>
