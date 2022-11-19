@@ -1,4 +1,4 @@
-## Slider
+## Auto Slider
 
 Slider with React<br>
 <br>
